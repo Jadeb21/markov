@@ -3,15 +3,15 @@
 #include <string.h>
 
 // Structure de type cellule :
-typedef struct cellule {
+typedef struct cell {
     int sommet_arrivee;
     float proba;
-    struct cellule* suivante;
-} Cellule;
+    struct cell* suivante;
+} Cell;
 
 // Structure de type liste :
 typedef struct liste {
-    Cellule* head;
+    Cell* head;
 } Liste;
 
 // structure de liste adjacente
