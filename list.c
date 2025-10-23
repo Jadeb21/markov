@@ -34,3 +34,6 @@ void displayListeAdj(ListeAdj g){
 
 
 
+
+
+
