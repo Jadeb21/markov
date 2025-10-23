@@ -23,6 +23,13 @@ void displayListe(liste l){
         current = current->suivante;
     }
 }
+//Afficher la liste adjacente
+void displayListeAdj(ListeAdj g){
+  for (int i = 0; i < g.nb_sommets; i++) {
+    printf("Sommet %d: ", i + 1);
+    displayListe(g.tab_liste[i]);
+  }
+
 
 
 
