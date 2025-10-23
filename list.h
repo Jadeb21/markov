@@ -24,5 +24,11 @@ typedef struct liste_adj{
 } ListeAdj;
 
 void add_list_cell(Liste* liste, Cell* cell);
+Cell *createCell(int arrivee, float proba);
+Liste createListe();
+void addCell(liste *l, int arrivee, float proba);
+void displayListe(Liste l);
+ListeAdj createListeAdj(int taille);
+void displayListeAdj(ListeAdj g);
 
 #endif
