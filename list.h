@@ -19,3 +19,5 @@ typedef struct liste_adj{
     Liste* tab_liste;
     int nb_sommets;
 } ListeAdj;
+
+void add_list_cell_beginning(Liste* liste, Cell* cell);
