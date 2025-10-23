@@ -4,6 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+Liste createListe(){
+  Liste list;
+  list.head = NULL;
+  return list;
+}
+
 //Ajouter cellule a une liste
 void addCell(Liste *l, int arrivee, float probab) {
     Cell* new_cell = createCell(arrivee, probab);
