@@ -29,8 +29,3 @@ static char *getID(int i)
 }
 
 
-Liste createListe();
-void addCell(liste *l, int arrivee, float proba);
-void displayListe(Liste l);
-ListeAdj createListeAdj(int taille);
-void displayListeAdj(Liste_adj g);
