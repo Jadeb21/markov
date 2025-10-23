@@ -4,6 +4,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+//Créer une cellule a une liste
+cell createCell(int arrivee, float probab){
+    cellnouv;
+    nouv = (t_cell*)malloc(sizeof(cell));
+    nouv->sommet_arrivee = arrivee;
+    nouv->proba = probab;
+    nouv->suivante = NULL;
+    return nouv;
+}
+
+// Liste vide
 Liste createListe(){
   Liste list;
   list.head = NULL;
@@ -29,6 +41,7 @@ void displayListe(liste l){
         current = current->suivante;
     }
 }
+
 //Afficher la liste adjacente
 void displayListeAdj(ListeAdj g){
   for (int i = 0; i < g.nb_sommets; i++) {
