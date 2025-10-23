@@ -23,10 +23,9 @@ typedef struct liste_adj{
     int nb_sommets;
 } ListeAdj;
 
-void add_list_cell(Liste* liste, Cell* cell);
-Cell *createCell(int arrivee, float proba);
+Cell *createCell(int arrivee, float probab);
 Liste createListe();
-void addCell(liste *l, int arrivee, float proba);
+void addCell(liste *l, int arrivee, float probab);
 void displayListe(Liste l);
 ListeAdj createListeAdj(int taille);
 void displayListeAdj(ListeAdj g);
