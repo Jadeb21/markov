@@ -53,12 +53,3 @@ void displayListeAdj(ListeAdj g){
 
 
 
-//Créer une cellule a une liste
-cell *createCell(int arrivee, float probab){
-	cell *nouv;
-	nouv = (t_cell*)malloc(sizeof(cell));
-	nouv->sommet_arrivee = arrivee;
-	nouv->proba = probab;
-	nouv->suivante = NULL;
-	return nouv;}
-
