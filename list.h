@@ -10,24 +10,26 @@ typedef struct cell {
     int sommet_arrivee;
     float proba;
     struct cell* suivante;
-} Cell;
+} cell;
 
 // Structure de type liste :
 typedef struct liste {
-    Cell* head;
-} Liste;
+    struct cell* head;
+    struct cell* tail;
+} liste;
 
 // structure de liste adjacente
 typedef struct liste_adj{
-    Liste* tab_liste;
+    liste* tab_liste;
     int nb_sommets;
-} ListeAdj;
+} listeAdj;
 
-Cell *createCell(int arrivee, float probab);
-Liste createListe();
+cell *createCell(int arrivee, float probab);
+liste *createListe();
 void addCell(liste *l, int arrivee, float probab);
-void displayListe(Liste l);
-ListeAdj createListeAdj(int taille);
-void displayListeAdj(ListeAdj g);
+void displayListe(liste l);
+listeAdj createListeAdj(int taille);
+void displayListeAdj(listeAdj g);
+listeAdj readGraph(const char *filename);
 
 #endif
