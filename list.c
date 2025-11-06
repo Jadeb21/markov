@@ -84,6 +84,7 @@ listeAdj readGraph(const char *filename) {
     listeAdj g = createListeAdj(nbvert);
 
     while (fscanf(file, "%d %d %f", &depart, &arrivee, &proba) == 3) {
+        // REMETTRE l'ordre ORIGINAL
         addCell(&g.tab_liste[depart - 1], arrivee, proba);
     }
 
@@ -120,3 +121,55 @@ int verifierGrapheMarkov(listeAdj g) {
 
     return estMarkov;
 }
+
+
+// Fonction getId
+char* getId(int num) {
+    static char id[10];
+    int index = 0;
+    int temp = num;
+
+    while (temp > 0) {
+        temp--;
+        id[index++] = 'A' + (temp % 26);
+        temp /= 26;
+    }
+    // Inverser la chaîne
+    for (int i = 0; i < index / 2; i++) {
+        char temp = id[i];
+        id[i] = id[index - 1 - i];
+        id[index - 1 - i] = temp;
+    }
+
+    id[index] = '\0';
+    return id;
+}
+
+// Fonction pour generer le fichier mermaid.txt
+void genererFichierMermaid(listeAdj g, const char* nomFichier) {
+    FILE *file = fopen(nomFichier, "w");
+    if (!file) {
+        perror("Impossible de créer le fichier");
+        return;
+    }
+
+    // Écrire les sommets avec leur numéro
+    for (int i = 0; i < g.nb_sommets; i++) {
+        fprintf(file, "%s((%d))\n", getId(i + 1), i + 1);
+    }
+
+    // Écrire les arêtes avec les probabilités
+    for (int i = 0; i < g.nb_sommets; i++) {
+        cell* current = g.tab_liste[i].head;
+        while (current != NULL) {
+            fprintf(file, "%s -->|%.2f|%s\n",
+                    getId(i + 1),
+                    current->proba,
+                    getId(current->sommet_arrivee));
+            current = current->suivante;
+        }
+    }
+
+    fclose(file);
+
+    }
