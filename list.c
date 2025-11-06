@@ -125,7 +125,7 @@ int verifierGrapheMarkov(listeAdj g) {
 
 // Fonction getId
 char* getId(int num) {
-    static char id[10];
+    char* id = malloc(10 * sizeof(char));
     int index = 0;
     int temp = num;
 
@@ -136,9 +136,9 @@ char* getId(int num) {
     }
     // Inverser la chaîne
     for (int i = 0; i < index / 2; i++) {
-        char temp = id[i];
+        char tmp = id[i];
         id[i] = id[index - 1 - i];
-        id[index - 1 - i] = temp;
+        id[index - 1 - i] = tmp;
     }
 
     id[index] = '\0';
@@ -153,6 +153,15 @@ void genererFichierMermaid(listeAdj g, const char* nomFichier) {
         return;
     }
 
+    // Écrire l'en-tête
+    fprintf(file, "---\n");
+    fprintf(file, "config:\n");
+    fprintf(file, "  layout: elk\n");
+    fprintf(file, "  theme: neo\n");
+    fprintf(file, "  look: neo\n");
+    fprintf(file, "---\n");
+    fprintf(file, "flowchart LR\n");
+
     // Écrire les sommets avec leur numéro
     for (int i = 0; i < g.nb_sommets; i++) {
         fprintf(file, "%s((%d))\n", getId(i + 1), i + 1);
@@ -162,14 +171,15 @@ void genererFichierMermaid(listeAdj g, const char* nomFichier) {
     for (int i = 0; i < g.nb_sommets; i++) {
         cell* current = g.tab_liste[i].head;
         while (current != NULL) {
-            fprintf(file, "%s -->|%.2f|%s\n",
-                    getId(i + 1),
-                    current->proba,
-                    getId(current->sommet_arrivee));
+            char* idFrom = getId(i + 1);
+            char* idTo   = getId(current->sommet_arrivee);
+            fprintf(file, "%s -->|%.2f|%s\n", idFrom, current->proba, idTo);
+            free(idFrom);
+            free(idTo);
+
             current = current->suivante;
         }
     }
 
     fclose(file);
-
-    }
+}
