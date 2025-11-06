@@ -17,14 +17,15 @@ int main() {
 
     listeAdj g = readGraph(filename);
 
-
-
-
     // Affiche la liste adjacente
     printf("Liste Adjacente du graphe :\n");
     displayListeAdj(g);
 
-    // Memoire liberer
+    // Affiche la vérification du graphe de Markov
+    printf("Verification graphe de Markov :\n");
+    verifierGrapheMarkov(g);
+
+    // Memoire libere
     for (int i = 0; i < g.nb_sommets; i++) {
         cell *current = g.tab_liste[i].head;
         while (current != NULL) {

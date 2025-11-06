@@ -31,5 +31,7 @@ void displayListe(liste l);
 listeAdj createListeAdj(int taille);
 void displayListeAdj(listeAdj g);
 listeAdj readGraph(const char *filename);
+int verifierGrapheMarkov(listeAdj g);
+
 
 #endif

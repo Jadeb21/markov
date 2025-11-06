@@ -90,3 +90,33 @@ listeAdj readGraph(const char *filename) {
     fclose(file);
     return g;
 }
+
+// Fonction pour vérifier si le graphe est un graphe de Markov
+int verifierGrapheMarkov(listeAdj g) {
+    int estMarkov = 1;
+    for (int i = 0; i < g.nb_sommets; i++) {
+        float somme = 0.0;
+        cell *current = g.tab_liste[i].head;
+
+        // Calculer la somme des probabilités sortantes pour le sommet i
+        while (current != NULL) {
+            somme += current->proba;
+            current = current->suivante;
+        }
+
+        // Vérifier si la somme est entre 0.99 et 1.01
+        if (somme < 0.99 || somme > 1.01) {
+            printf("la somme des probabilites du sommet %d est %.2f\n", i + 1, somme);
+            estMarkov = 0;
+        }
+    }
+
+    // Afficher le résultat final UNE SEULE FOIS
+    if (estMarkov) {
+        printf("Le graphe est un graphe de Markov\n");
+    } else {
+        printf("Le graphe n'est pas un graphe de Markov\n");
+    }
+
+    return estMarkov;
+}
