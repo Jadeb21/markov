@@ -104,9 +104,9 @@ int verifierGrapheMarkov(listeAdj g) {
             current = current->suivante;
         }
 
-        // Vérifier si la somme est entre 0.99 et 1.01
-        if (somme < 0.99 || somme > 1.01) {
-            printf("la somme des probabilites du sommet %d est %.2f\n", i + 1, somme);
+        // Vérifier si la somme est entre 0.99999999999 et 1.00000000001
+        if (somme < 0.99999999999 || somme > 1.00000000001) {
+            printf("la somme des probabilites du sommet %d est %.6f\n", i + 1, somme);
             estMarkov = 0;
         }
     }
