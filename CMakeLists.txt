@@ -7,7 +7,8 @@ set(SOURCES
         main.c
         utils.c
         hasse.c
-        list.c # Ajoute ce fichier seulement si tes fonctions sont dedans
+        list.c
+        tarjan.c
 )
 
 add_executable(TI_301_PJT ${SOURCES})

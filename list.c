@@ -149,7 +149,7 @@ char* getId(int num) {
 void genererFichierMermaid(listeAdj g, const char* nomFichier) {
     FILE *file = fopen(nomFichier, "w");
     if (!file) {
-        perror("Impossible de créer le fichier");
+        perror("Impossible de creer le fichier");
         return;
     }
 
