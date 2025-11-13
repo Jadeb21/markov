@@ -29,16 +29,29 @@ int main() {
     verifierGrapheMarkov(g);
     printf("\n");
 
-    // Génère le fichier Mermaid
+    // Affiche le fichier Mermaid original
     char mermaidFile[150];
     sprintf(mermaidFile, "../data/%s_mermaid.txt", input);
     genererFichierMermaid(g, mermaidFile);
-    printf("\n");
 
     // Affiche l'algo de tarjan
     t_partition *partition = algorithme_tarjan_partition(g);
     printf("\n");
 
+    printf("Diagramme de Hasse :\n");
+    int *corresp = creer_tab_corresp(partition, g.nb_sommets);
+    t_link_array *liens = rencenser(&g, corresp);
+
+    printf("Liens entre les classes : %d\n", liens->log_size);
+    for (int i = 0; i < liens->log_size; i++) {
+        printf("C%d -> C%d\n", liens->links[i].from + 1, liens->links[i].to + 1);
+    }
+    printf("\n");
+
+    // Génère le diagramme de Hasse
+    char hasseFile[150];
+    sprintf(hasseFile, "../data/%s_hasse.txt", input);
+    genererHasseMermaid(partition, liens, hasseFile, 0);
 
     // Memoire libere
     for (int i = 0; i < g.nb_sommets; i++) {
