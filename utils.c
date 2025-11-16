@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "utils.h"
-#include "list.h"
+
 
 // Dans utils.c, utilisez l'algorithme qui fonctionne
 char* getID(int num) {

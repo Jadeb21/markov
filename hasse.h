@@ -20,6 +20,8 @@ int* creer_tab_corresp(t_partition *partition, int nb_sommets);
 void ajouter_link(t_link_array *link, int from, int to);
 void removeTransitiveLinks(t_link_array *p_link_array);
 void genererHasseMermaid(t_partition *partition, t_link_array *link, const char* nomFichier, int avecRedondances);
+void analyserCarac(t_partition *partition, listeAdj *g);
+
 /**
  * @brief Creates a link array from the given partition and graph.
  *

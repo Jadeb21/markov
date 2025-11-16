@@ -1,12 +1,19 @@
 #include <malloc.h>
 #include "hasse.h"
 #include "list.h"
-#include "utils.h"
 #include "tarjan.h"
 
 // Recencer
 t_link_array* rencenser(listeAdj *g, int *t_link_corresp) {
     t_link_array *link = creer_list_link(g->nb_sommets);
+
+    //creation d'une simple matrice pour stockage de ci -> cj
+    int max_classes = g->nb_sommets; // worst case
+    int **seen = malloc(max_classes * sizeof(int*));
+    for (int i = 0; i < max_classes; i++) {
+        seen[i] = calloc(max_classes, sizeof(int));
+    }
+
     for (int i=0; i < g->nb_sommets; i++) {
         int Ci = t_link_corresp[i];
         cell *voisin = g->tab_liste[i].head;
@@ -15,12 +22,20 @@ t_link_array* rencenser(listeAdj *g, int *t_link_corresp) {
             int j = voisin->sommet_arrivee -1;
             int Cj = t_link_corresp[j];
 
-            if (Ci != Cj) {
+            if (Ci != Cj && !seen[Ci][Cj]) {
                 ajouter_link(link, Ci, Cj);
+                seen[Ci][Cj] = 1; // Mark as seen
             }
             voisin = voisin->suivante;
         }
     }
+
+    //libere la matrice nouvellement crée
+    for (int i = 0; i < max_classes; i++) {
+        free(seen[i]);
+    }
+    free(seen);
+
     return link;
 }
 
@@ -134,4 +149,72 @@ void removeTransitiveLinks(t_link_array *p_link_array)
             i++;
         }
     }
+}
+
+//Fonction pour analyser les caractéristiques de notre graphe
+void analyserCarac(t_partition *partition, listeAdj *g) {
+    printf("\nCaracteristique du graphe\n");
+
+    // Tableau pour savoir à quelle classe appartient chaque sommet
+    int *IDclasse = malloc(g->nb_sommets * sizeof(int));
+    for (int i = 0; i < partition->taille; i++) {
+        for (int j = 0; j < partition->classes[i].taille; j++) {
+            IDclasse[partition->classes[i].sommets[j] - 1] = i;
+        }
+    }
+
+    // Vérifier si chaque classe est persistante
+    int *estPersistante = malloc(partition->taille * sizeof(int));
+    for (int i = 0; i < partition->taille; i++) {
+        estPersistante[i] = 1;
+
+        for (int j = 0; j < partition->classes[i].taille && estPersistante[i]; j++) {
+            int sommet = partition->classes[i].sommets[j] - 1;
+            cell *voisin = g->tab_liste[sommet].head;
+
+            while (voisin != NULL && estPersistante[i]) {
+                int destClasse = IDclasse[voisin->sommet_arrivee - 1];
+                if (destClasse != i) estPersistante[i] = 0;
+                voisin = voisin->suivante;
+            }
+        }
+    }
+
+    // Affichage
+    printf("\n");
+    for (int i = 0; i < partition->taille; i++) {
+        printf("La classe {");
+        for (int j = 0; j < partition->classes[i].taille; j++) {
+            printf("%d%s", partition->classes[i].sommets[j],
+                   (j < partition->classes[i].taille - 1) ? "," : "");
+        }
+        printf("} est %s", estPersistante[i] ? "persistante" : "transitoire");
+
+        // Affichage des états
+        if (partition->classes[i].taille == 1) {
+            printf(" : l'etat %d est %s", partition->classes[i].sommets[0],
+                   estPersistante[i] ? "persistant" : "transitoire");
+            if (estPersistante[i]) printf(" : l'etat %d est absorbant", partition->classes[i].sommets[0]);
+        } else {
+            printf(" : les etats ");
+            for (int j = 0; j < partition->classes[i].taille; j++) {
+                printf("%d", partition->classes[i].sommets[j]);
+                if (j < partition->classes[i].taille - 2) printf(", ");
+                else if (j == partition->classes[i].taille - 2) printf(" et ");
+            }
+            printf(" sont %s", estPersistante[i] ? "persistants" : "transitoires");
+        }
+        printf(";\n");
+    }
+
+    // Irréductibilité
+    printf("Le graphe de Markov ");
+    if (partition->taille == 1) {
+        printf("est irreductible.\n");
+    } else {
+        printf("n'est pas irreductible.\n");
+    }
+
+    free(IDclasse);
+    free(estPersistante);
 }

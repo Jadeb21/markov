@@ -48,6 +48,9 @@ int main() {
     }
     printf("\n");
 
+    //Affiche les caractétistiques complètes du graphe
+    analyserCarac(partition, &g);
+    printf("\n");
 
     // Génère le diagramme de Hasse
     char hasseFile[150];
