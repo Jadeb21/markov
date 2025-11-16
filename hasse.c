@@ -1,6 +1,7 @@
 #include <malloc.h>
 #include "hasse.h"
 #include "list.h"
+#include "utils.h"
 #include "tarjan.h"
 
 // Recencer

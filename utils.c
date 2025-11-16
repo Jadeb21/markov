@@ -3,29 +3,26 @@
 #include <string.h>
 
 #include "utils.h"
+#include "list.h"
 
-static char *getID(int i)
-{
-    // translate from 1,2,3, .. ,500+ to A,B,C,..,Z,AA,AB,...
-    static char buffer[10];
-    char temp[10];
+// Dans utils.c, utilisez l'algorithme qui fonctionne
+char* getID(int num) {
+    char* id = malloc(10 * sizeof(char));
     int index = 0;
+    int temp = num;
 
-    i--; // Adjust to 0-based index
-    while (i >= 0)
-    {
-        temp[index++] = 'A' + (i % 26);
-        i = (i / 26) - 1;
+    while (temp > 0) {
+        temp--;
+        id[index++] = 'A' + (temp % 26);
+        temp /= 26;
+    }
+    // Inverser la chaîne
+    for (int i = 0; i < index / 2; i++) {
+        char tmp = id[i];
+        id[i] = id[index - 1 - i];
+        id[index - 1 - i] = tmp;
     }
 
-    // Reverse the string to get the correct order
-    for (int j = 0; j < index; j++)
-    {
-        buffer[j] = temp[index - j - 1];
-    }
-    buffer[index] = '\0';
-
-    return buffer;
+    id[index] = '\0';
+    return id;
 }
-
-

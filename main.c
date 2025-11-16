@@ -48,6 +48,7 @@ int main() {
     }
     printf("\n");
 
+
     // Génère le diagramme de Hasse
     char hasseFile[150];
     sprintf(hasseFile, "../data/%s_hasse.txt", input);

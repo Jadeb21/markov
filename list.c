@@ -1,6 +1,7 @@
 #include "list.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "utils.h"
 #include <string.h>
 
 // crée une cellule
@@ -123,28 +124,7 @@ int verifierGrapheMarkov(listeAdj g) {
 }
 
 
-// Fonction getId
-char* getId(int num) {
-    char* id = malloc(10 * sizeof(char));
-    int index = 0;
-    int temp = num;
-
-    while (temp > 0) {
-        temp--;
-        id[index++] = 'A' + (temp % 26);
-        temp /= 26;
-    }
-    // Inverser la chaîne
-    for (int i = 0; i < index / 2; i++) {
-        char tmp = id[i];
-        id[i] = id[index - 1 - i];
-        id[index - 1 - i] = tmp;
-    }
-
-    id[index] = '\0';
-    return id;
-}
-
+// Fonction pour generer le fichier mermaid.txt
 // Fonction pour generer le fichier mermaid.txt
 void genererFichierMermaid(listeAdj g, const char* nomFichier) {
     FILE *file = fopen(nomFichier, "w");
@@ -164,19 +144,18 @@ void genererFichierMermaid(listeAdj g, const char* nomFichier) {
 
     // Écrire les sommets avec leur numéro
     for (int i = 0; i < g.nb_sommets; i++) {
-        fprintf(file, "%s((%d))\n", getId(i + 1), i + 1);
+        fprintf(file, "%s((%d))\n", getID(i + 1), i + 1);
     }
 
     // Écrire les arêtes avec les probabilités
     for (int i = 0; i < g.nb_sommets; i++) {
         cell* current = g.tab_liste[i].head;
         while (current != NULL) {
-            char* idFrom = getId(i + 1);
-            char* idTo   = getId(current->sommet_arrivee);
-            fprintf(file, "%s -->|%.2f|%s\n", idFrom, current->proba, idTo);
-            free(idFrom);
-            free(idTo);
-
+            // Pas besoin de free car getID utilise un buffer statique
+            fprintf(file, "%s -->|%.2f|%s\n",
+                    getID(i + 1),
+                    current->proba,
+                    getID(current->sommet_arrivee));
             current = current->suivante;
         }
     }

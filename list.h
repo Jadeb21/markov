@@ -33,7 +33,6 @@ void displayListeAdj(listeAdj g);
 listeAdj readGraph(const char *filename);
 int verifierGrapheMarkov(listeAdj g);
 void genererFichierMermaid(listeAdj g, const char* nomFichier);
-char* getId(int num);
 void genererFichierMermaid(listeAdj g, const char* nomFichier);
 int verifierGrapheMarkov(listeAdj g);
 

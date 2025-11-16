@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 // Initialisation des structures de données pour Tarjan
 t_tarjan_data* initialiser_tarjan(listeAdj *g) {
     t_tarjan_data *data = malloc(sizeof(t_tarjan_data));
