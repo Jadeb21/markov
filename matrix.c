@@ -97,3 +97,47 @@ double difference_matrix(t_matrix* M, t_matrix* N){
 
     return difference;
 }
+
+//On doit fournir la matrice originale, la partition(ensemble des classes), et l'index qu'on veut extraire de la partition afin de pouvoir fabriquer cetter sous-matrice.
+/*
+t_matrix subMatrix(t_matrix matrix, t_partition part, int compo_index) {
+	if (part == NULL || compo_index < 0 || compo_index >= part->taille) {
+        	printf("Erreur: Index %d hors limites (taille = %d)\n", compo_index, part->taille);
+        	return NULL;
+    	}
+
+	t_matrix *result = creer_matrice-valzeros(matrix->lignes, part->classes[compo_index]->taille);
+	for (int i = 0; i < matrix->lignes; i++) {
+		for (int j = 0; j  < matrix->cols; j++) {
+			if (matrix->cols == part->classes[compo_index]->taille) {
+				result[i][j] == matrix[lignes][cols];
+			}
+		}
+	}
+	return result;
+}
+*/
+t_matrix* subMatrix(t_matrix* matrix, t_partition part, int compo_index) {
+    if (matrix == NULL || part == NULL || compo_index < 0 || compo_index >= part->taille) {
+        printf("Erreur: Paramètres invalides\n");
+        return NULL;
+    }
+    t_classe* classe = part->classes[compo_index];
+    t_matrix* result = creer_matrice_valzeros(matrix->lignes, classe->taille);
+    if (result == NULL) {
+        printf("Erreur d'allocation mémoire\n");
+        return NULL;
+    }
+    for (int i = 0; i < matrix->lignes; i++) {
+        for (int j_classe = 0; j_classe < classe->taille; j_classe++) {
+            int j_matrix = classe->sommets[j_classe];
+            if (j_matrix < 0 || j_matrix >= matrix->cols) {
+                printf("Erreur: Indice de sommet %d invalide\n", j_matrix);
+                liberer_matrice(result);
+                return NULL;
+            }
+            result->data[i][j_classe] = matrix->data[i][j_matrix];
+        }
+    }
+    return result;
+}
