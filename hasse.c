@@ -2,6 +2,7 @@
 #include "hasse.h"
 #include "list.h"
 #include "tarjan.h"
+#include "utils.h"
 
 // Recencer
 t_link_array* rencenser(listeAdj *g, int *t_link_corresp) {
@@ -71,29 +72,41 @@ void ajouter_link(t_link_array *link, int from, int to) {
 //generer le fichier Mermaid du diagramme de Hasse
 void genererHasseMermaid(t_partition *partition, t_link_array *liens, const char* nomFichier, int avecRedondances) {
     FILE *file = fopen(nomFichier, "w");
+
+    // En-tête exact comme demandé
     fprintf(file, "---\n");
     fprintf(file, "config:\n");
-    fprintf(file, "  layout: elk\n");
-    fprintf(file, "  theme: neo\n");
-    fprintf(file, "  look: neo\n");
+    fprintf(file, "   layout: elk\n");
+    fprintf(file, "   theme: mc\n");
+    fprintf(file, "   look: classic\n");
     fprintf(file, "---\n");
-    fprintf(file, "flowchart LR\n");
+    fprintf(file, "\nflowchart LR\n");
+
+    // Tableau stocke ID des classes
+    char** id_classes = malloc(partition->taille * sizeof(char*));
+
+    // Générer ID pour chaque classe
+    for (int i = 0; i < partition->taille; i++) {
+        id_classes[i] = getID(i + 1);
+    }
 
     // Sommets du diagramme de Hasse
     for (int i = 0; i < partition->taille; i++) {
-        fprintf(file, "C%d(\"{", i+1);
+        fprintf(file, "%s[\"", id_classes[i]);
+        fprintf(file, "{");
 
-        // Afficher tous les sommets de la classe
+        // Sommets de la classe
         for (int j = 0; j < partition->classes[i].taille; j++) {
             fprintf(file, "%d", partition->classes[i].sommets[j]);
             if (j < partition->classes[i].taille - 1) {
                 fprintf(file, ",");
             }
         }
-        fprintf(file, "}\")\n");
+        fprintf(file, "}\"]\n");
     }
+    fprintf(file, "\n");
 
-    // Supprimer les redondances
+    // Suppression des redondances
     if (!avecRedondances) {
         removeTransitiveLinks(liens);
     }
@@ -104,9 +117,10 @@ void genererHasseMermaid(t_partition *partition, t_link_array *liens, const char
         int to = liens->links[i].to;
 
         if (from >= 0 && from < partition->taille && to >= 0 && to < partition->taille) {
-            fprintf(file, "C%d --> C%d\n", from+1, to+1);
+            fprintf(file, "%s --> %s\n", getID(from + 1), getID(to + 1));
         }
     }
+
     fclose(file);
 }
 
