@@ -5,15 +5,15 @@ typedef struct {
     double **data;
     int lignes;
     int cols;
-} Matrix;
+} t_matrix;
 
-Matrix* creer_matrice_adj(int n, int** liste_adjacence, int* tailles_listes);
-Matrix* creer_matrice_valzeros(int lignes, int cols);
-Matrix* multiplication_matrice(Matrix* a, Matrix* b);
-Matrix* difference_matrice(Matrix* a, Matrix* b);
-void copie_matrice(Matrix* src, Matrix* dest);
-Matrix* multiplication_matrice(Matrix* M, Matrix* N);
-double difference_matrix(Matrix* M, Matrix* N);
+t_matrix* creer_matrice_adj(int n, int** liste_adjacence, int* tailles_listes);
+t_matrix* creer_matrice_valzeros(int lignes, int cols);
+t_matrix* multiplication_matrice(t_matrix* a, t_matrix* b);
+t_matrix* difference_matrice(t_matrix* a, t_matrix* b);
+void copie_matrice(t_matrix* src, t_matrix* dest);
+t_matrix* multiplication_matrice(t_matrix* M, t_matrix* N);
+double difference_matrix(t_matrix* M, t_matrix* N);
 
 
 /**
@@ -24,7 +24,6 @@ double difference_matrix(Matrix* M, Matrix* N);
  * @param compo_index The index of the component to extract.
  * @return t_matrix The submatrix corresponding to the specified component.
  *
- * We changed t_matrix to Matrix. 
-*/
-Matrix subMatrix(Matrix matrix, t_partition part, int compo_index);
+**/
+t_matrix subMatrix(t_matrix matrix, t_partition part, int compo_index);
 #endif

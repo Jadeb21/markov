@@ -4,8 +4,8 @@
 #include "list.h"
 #include <math.h>
 
-Matrix* creer_matrice_adj(int n, int** liste_adjacence, int* tailles_listes) {
-  Matrix* matrice=(Matrix*)malloc(sizeof(Matrix));
+t_matrix* creer_matrice_adj(int n, int** liste_adjacence, int* tailles_listes) {
+  t_matrix* matrice=(t_matrix*)malloc(sizeof(t_matrix));
   matrice->lignes = n;
   matrice->cols=n;
   matrice->data =(double**)malloc(sizeof(double*)*n);
@@ -27,8 +27,8 @@ Matrix* creer_matrice_adj(int n, int** liste_adjacence, int* tailles_listes) {
     return matrice;
 }
 
-Matrix* creer_matrice_valzeros(int lignes, int cols){
-  Matrix* matrice = (Matrix*)malloc(sizeof(Matrix));
+t_matrix* creer_matrice_valzeros(int lignes, int cols){
+  t_matrix* matrice = (t_matrix*)malloc(sizeof(t_matrix));
   matrice->lignes = lignes;
   matrice->cols = cols;
   matrice->data =(double**)malloc(sizeof(double*)*lignes);
@@ -38,7 +38,7 @@ Matrix* creer_matrice_valzeros(int lignes, int cols){
   return matrice;
 }
 
-void copie_matrice(Matrix* src, Matrix* dest){
+void copie_matrice(t_matrix* src, t_matrix* dest){
   if (src->lignes != dest->lignes || src->cols != dest->cols) {
     printf("Attention : Matrice de taille différentes\n");
     return;
@@ -50,12 +50,12 @@ void copie_matrice(Matrix* src, Matrix* dest){
   }
 }
 
-Matrix* multiplication_matrice(Matrix* M, Matrix* N){
+t_matrix* multiplication_matrice(t_matrix* M, t_matrix* N){
   if (M->cols != N->lignes) {
     printf("Attention : Matrice de dimension differentes\n");
     return NULL;
   }
-  Matrix* result = creer_matrice_valzeros(M->lignes, N->cols);
+  t_matrix* result = creer_matrice_valzeros(M->lignes, N->cols);
   for (int i = 0; i < M->lignes; i++) {
     for (int j = 0; j < N->cols; j++) {
       for (int k = 0; k < M->cols; k++) {
@@ -67,12 +67,12 @@ Matrix* multiplication_matrice(Matrix* M, Matrix* N){
 }
 
 
-/*Matrix* difference_matrix(Matrix* M, Matrix* N){
+/*t_matrix* difference_matrix(t_matrix* M, t_matrix* N){
 	if (M->lignes != N->lignes || M->cols != N->cols){
 		printf("Attention: Matrice de tailles differentes\n");
 		return NULL;
 	}
-	Matrix* result = creer_matrice_valzeros(M->lignes, M-> cols);
+	t_matrix* result = creer_matrice_valzeros(M->lignes, M-> cols);
 		for (int i = 0; i < M->lignes; i++) {
 			for (int j = 0; j < M->cols; j++) {
 				result->data[i][j] = M->data[i][j] - N->data[i][j];
@@ -82,7 +82,7 @@ Matrix* multiplication_matrice(Matrix* M, Matrix* N){
 }
 */
 
-double difference_matrix(Matrix* M, Matrix* N){
+double difference_matrix(t_matrix* M, t_matrix* N){
   if (M->lignes != N->lignes || M->cols != N->cols) {
         printf("Attention: Matrices de tailles différentes\n");
         return -1.0;
