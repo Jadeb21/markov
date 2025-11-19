@@ -23,7 +23,7 @@ Matrix* creer_matrice_adj(int n, int** liste_adjacence, int* tailles_listes) {
             }
         }
   	}
-  return matrice;
+    return matrice;
 }
 
 Matrix* creer_matrice_valzeros(int lignes, int cols){
@@ -65,17 +65,17 @@ Matrix* multiplication_matrice(Matrix* a, Matrix* b){
   return result;
 }
 
+
 Matrix* difference_matrix(Matrix* a, Matrix* b){
 	if (a->lignes != b->lignes && a->cols != b->cols){
 		printf("Attention: Matrice de dimension differentes\n");
 		return NULL;
 	}
-	Matrix* result = creer_matrice_valzeros(a->lignes, b-> cols){
-		for (int i = 0; i < a->lignes; i++) {*
+	Matrix* result = creer_matrice_valzeros(a->lignes, b-> cols);
+		for (int i = 0; i < a->lignes; i++) {
 			for (int j = 0; j < b->cols; j++) {
 				result->data[i][j] == a->data[i][j] - b->data[i][j];
 			}
 		}
-	}
 	return result;
 }

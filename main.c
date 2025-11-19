@@ -12,7 +12,7 @@ int main() {
     char filename[120];
 
     printf("Quel fichier voulez-vous utiliser ?\n");
-    printf("Options : exemple1, exemple1_chatGPT_fixed, exemple1_from_chatGPT, exemple2, exemple3, exemple4_2check, exemple_hasse1, exemple_scc1, exemple_valid_step3\n");
+    printf("Options : exemple1, exemple1_chatGPT_fixed, exemple1_from_chatGPT, exemple2, exemple3, exemple4_2check, exemple_hasse1, exemple_scc1, exemple_valid_step3, exemple_meteo\n");
     scanf("%99s", input);
     sprintf(filename, "../data/%s.txt", input);
     printf("Fichier choisi : %s\n", filename);
