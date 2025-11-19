@@ -4,7 +4,7 @@
 #include <string.h>
 
 
-// Initialisation des structures de données pour Tarjan
+// Initialisation des structures de données pour Tarjan - c'est notre pile
 t_tarjan_data* initialiser_tarjan(listeAdj *g) {
     t_tarjan_data *data = malloc(sizeof(t_tarjan_data));
     data->graphe = g;
@@ -23,13 +23,6 @@ t_tarjan_data* initialiser_tarjan(listeAdj *g) {
     }
 
     return data;
-}
-
-// Libère la mémoire de Tarjan
-void liberer_tarjan(t_tarjan_data *data) {
-    free(data->sommets);
-    free(data->pile);
-    free(data);
 }
 
 // Ajoute une classe à la partition
@@ -106,6 +99,13 @@ void tarjan_visite(t_tarjan_data *data, int sommet_index) {
         }
         printf("}\n");
     }
+}
+
+// Libère la mémoire de Tarjan
+void liberer_tarjan(t_tarjan_data *data) {
+    free(data->sommets);
+    free(data->pile);
+    free(data);
 }
 
 // Algorithme principal qui retourne une partition
