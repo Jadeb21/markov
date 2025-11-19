@@ -4,7 +4,9 @@
 #include "hasse.h"
 #include "utils.h"
 #include "tarjan.h"
+#include "matrix.h"
 
+Matrix* creer_matrice_liste_adjacence(listeAdj* g);
 int main() {
 
     // laisser l'utilisateur choisir le fichier
@@ -56,6 +58,86 @@ int main() {
     char hasseFile[150];
     sprintf(hasseFile, "../data/%s_hasse.txt", input);
     genererHasseMermaid(partition, liens, hasseFile, 0);
+
+    printf("Calcul matriciel\n");
+
+    Matrix* M = creer_matrice_liste_adjacence(&g);
+    printf("Matrice M :\n");
+    afficher_matrice(M);
+
+    // Calculer M²
+    printf("Matrice M^2 :\n");
+    Matrix* M2 = multiplication_matrice(M, M);
+    if (M2 != NULL) {
+        afficher_matrice(M2);
+    }
+
+    // Calculer M³
+    printf("Matrice M^3 :\n");
+    Matrix* M3 = NULL;
+    if (M2 != NULL) {
+        M3 = multiplication_matrice(M2, M);
+        if (M3 != NULL) {
+            afficher_matrice(M3);
+        }
+    }
+    printf("\n");
+
+    // Convergence M^k
+    printf("Convergence\n");//Quand episolon = 0,01
+
+    Matrix* Mk = creer_matrice_valzeros(g.nb_sommets, g.nb_sommets);
+    Matrix* Mk_prev = creer_matrice_valzeros(g.nb_sommets, g.nb_sommets);
+
+    // Initialiser Mk avec M
+    copie_matrice(M, Mk);
+
+    int iterations = 0;
+    double diff;
+    double epsilon = 0.01;
+    int convergence_atteinte = 0;
+
+    printf("Iterations de convergence :\n");
+    do {
+        copie_matrice(Mk, Mk_prev);  // Sauvegarder précédent
+
+        // Calculer Mk * M
+        Matrix* temp = multiplication_matrice(Mk, M);
+        copie_matrice(temp, Mk);
+
+
+        diff = difference_matrix(Mk, Mk_prev);
+        iterations++;
+
+        printf("Iteration %d: difference = %.6f", iterations, diff);
+        if (diff <= epsilon) {
+            printf(" \n");
+            convergence_atteinte = 1;
+        } else {
+            printf("\n");
+        }
+
+        // Limite de sécurité
+        if (iterations >= 1000) {
+            printf("Limite d'iterations atteinte\n");
+            break;
+        }
+
+    } while (diff > epsilon);
+    printf("\n");
+
+    // Résultats convergence
+    if (convergence_atteinte) {
+        printf("Convergence atteinte apres %d iterations\n", iterations);
+        printf("Difference finale : %.6f <= epsilon = %.3f\n", diff, epsilon);
+        printf("Matrice stationnaire M^%d:\n", iterations);
+        afficher_matrice(Mk);
+    } else {
+
+        printf("Convergence non atteinte apres %d iterations\n", iterations);
+        printf("Difference finale : %.6f > epsilon = %.3f\n", diff, epsilon);
+    }
+
 
     // Memoire libere
     for (int i = 0; i < g.nb_sommets; i++) {

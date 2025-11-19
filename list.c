@@ -125,7 +125,6 @@ int verifierGrapheMarkov(listeAdj g) {
 
 
 // Fonction pour generer le fichier mermaid.txt
-// Fonction pour generer le fichier mermaid.txt
 void genererFichierMermaid(listeAdj g, const char* nomFichier) {
     FILE *file = fopen(nomFichier, "w");
     if (!file) {

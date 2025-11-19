@@ -1,29 +1,32 @@
 #include "matrix.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "list.h"
 #include <math.h>
+#include "list.h"
 
-Matrix* creer_matrice_adj(int n, int** liste_adjacence, int* tailles_listes) {
-  Matrix* matrice=(Matrix*)malloc(sizeof(Matrix));
-  matrice->lignes = n;
-  matrice->cols=n;
-  matrice->data =(double**)malloc(sizeof(double*)*n);
+struct listeAdj* g;
+Matrix* creer_matrice_liste_adjacence(listeAdj* g) {
+    int n = g->nb_sommets;
+    Matrix* matrice = (Matrix*)malloc(sizeof(Matrix));
+    matrice->lignes = n;
+    matrice->cols = n;
+    matrice->data = (double**)malloc(sizeof(double*) * n);
 
-  for (int i = 0; i < n; i++) {
-    matrice->data[i] = (double*)calloc(n, sizeof(double));
+    // Initialiser à 0
+    for (int i = 0; i < n; i++) {
+        matrice->data[i] = (double*)calloc(n, sizeof(double));
     }
-   	//Probabilité
-  	for (int i = 0; i < n; i++) {
-     	int nb_voisins = tailles_listes[i];
-     	if(nb_voisins > 0) {
-       	double probability = 1.0/nb_voisins;
-       	for (int j = 0; j < nb_voisins; j++) {
-                int etat_arrivee = liste_adjacence[i][j] - 1;
-                matrice->data[i][etat_arrivee] = probability;
-            }
+
+    // Remplir avec les probabilités réelles depuis la liste d'adjacence
+    for (int i = 0; i < n; i++) {
+        cell* current = g->tab_liste[i].head;
+        while (current != NULL) {
+            int etat_arrivee = current->sommet_arrivee - 1;  // -1 pour l'indice C
+            float proba_reelle = current->proba;
+            matrice->data[i][etat_arrivee] = (double)proba_reelle;
+            current = current->suivante;
         }
-  	}
+    }
     return matrice;
 }
 
@@ -66,22 +69,6 @@ Matrix* multiplication_matrice(Matrix* M, Matrix* N){
   return result;
 }
 
-
-/*Matrix* difference_matrix(Matrix* M, Matrix* N){
-	if (M->lignes != N->lignes || M->cols != N->cols){
-		printf("Attention: Matrice de tailles differentes\n");
-		return NULL;
-	}
-	Matrix* result = creer_matrice_valzeros(M->lignes, M-> cols);
-		for (int i = 0; i < M->lignes; i++) {
-			for (int j = 0; j < M->cols; j++) {
-				result->data[i][j] = M->data[i][j] - N->data[i][j];
-			}
-		}
-	return result;
-}
-*/
-
 double difference_matrix(Matrix* M, Matrix* N){
   if (M->lignes != N->lignes || M->cols != N->cols) {
         printf("Attention: Matrices de tailles différentes\n");
@@ -97,3 +84,13 @@ double difference_matrix(Matrix* M, Matrix* N){
 
     return difference;
 }
+
+void afficher_matrice(Matrix* matrice) {
+    for (int i = 0; i < matrice->lignes; i++) {
+        for (int j = 0; j < matrice->cols; j++) {
+            printf("%.3f\t", matrice->data[i][j]);
+        }
+        printf("\n");
+    }
+}
+
