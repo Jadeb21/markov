@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
+#include <math.h>
 
 Matrix* creer_matrice_adj(int n, int** liste_adjacence, int* tailles_listes) {
   Matrix* matrice=(Matrix*)malloc(sizeof(Matrix));
@@ -49,16 +50,16 @@ void copie_matrice(Matrix* src, Matrix* dest){
   }
 }
 
-Matrix* multiplication_matrice(Matrix* a, Matrix* b){
-  if (a->cols != b->lignes) {
+Matrix* multiplication_matrice(Matrix* M, Matrix* N){
+  if (M->cols != N->lignes) {
     printf("Attention : Matrice de dimension differentes\n");
     return NULL;
   }
-  Matrix* result = creer_matrice_valzeros(a->lignes, b->cols);
-  for (int i = 0; i < a->lignes; i++) {
-    for (int j = 0; j < b->cols; j++) {
-      for (int k = 0; k < a->cols; k++) {
-        result->data[i][j] += a->data[i][k] * b->data[k][j];
+  Matrix* result = creer_matrice_valzeros(M->lignes, N->cols);
+  for (int i = 0; i < M->lignes; i++) {
+    for (int j = 0; j < N->cols; j++) {
+      for (int k = 0; k < M->cols; k++) {
+        result->data[i][j] += M->data[i][k] * N->data[k][j];
       }
     }
   }
@@ -66,16 +67,33 @@ Matrix* multiplication_matrice(Matrix* a, Matrix* b){
 }
 
 
-Matrix* difference_matrix(Matrix* a, Matrix* b){
-	if (a->lignes != b->lignes && a->cols != b->cols){
-		printf("Attention: Matrice de dimension differentes\n");
+/*Matrix* difference_matrix(Matrix* M, Matrix* N){
+	if (M->lignes != N->lignes || M->cols != N->cols){
+		printf("Attention: Matrice de tailles differentes\n");
 		return NULL;
 	}
-	Matrix* result = creer_matrice_valzeros(a->lignes, b-> cols);
-		for (int i = 0; i < a->lignes; i++) {
-			for (int j = 0; j < b->cols; j++) {
-				result->data[i][j] == a->data[i][j] - b->data[i][j];
+	Matrix* result = creer_matrice_valzeros(M->lignes, M-> cols);
+		for (int i = 0; i < M->lignes; i++) {
+			for (int j = 0; j < M->cols; j++) {
+				result->data[i][j] = M->data[i][j] - N->data[i][j];
 			}
 		}
 	return result;
+}
+*/
+
+double difference_matrix(Matrix* M, Matrix* N){
+  if (M->lignes != N->lignes || M->cols != N->cols) {
+        printf("Attention: Matrices de tailles différentes\n");
+        return -1.0;
+    }
+
+    double difference = 0.0;
+    for (int i = 0; i < M->lignes; i++) {
+        for (int j = 0; j < M->cols; j++) {
+            difference += fabs(M->data[i][j] - N->data[i][j]); //fabs --> pour calculer la valeur absolue
+        }
+    }
+
+    return difference;
 }

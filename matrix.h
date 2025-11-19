@@ -12,5 +12,7 @@ Matrix* creer_matrice_valzeros(int lignes, int cols);
 Matrix* multiplication_matrice(Matrix* a, Matrix* b);
 Matrix* difference_matrice(Matrix* a, Matrix* b);
 void copie_matrice(Matrix* src, Matrix* dest);
+Matrix* multiplication_matrice(Matrix* M, Matrix* N);
+double difference_matrix(Matrix* M, Matrix* N);
 
 #endif
