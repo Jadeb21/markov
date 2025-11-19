@@ -55,4 +55,5 @@ CMakeFiles/TI_301_PJT.dir/hasse.c.o: \
   /data/data/com.termux/files/usr/bin/../../usr/include/linux/wait.h \
   /data/data/com.termux/files/usr/bin/../../usr/include/android/legacy_stdlib_inlines.h \
   /data/data/com.termux/files/usr/bin/../../usr/include/bits/stdlib_inlines.h \
-  /data/data/com.termux/files/home/p/c/markov/tarjan.h
+  /data/data/com.termux/files/home/p/c/markov/tarjan.h \
+  /data/data/com.termux/files/home/p/c/markov/utils.h

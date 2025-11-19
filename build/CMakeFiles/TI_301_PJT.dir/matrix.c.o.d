@@ -54,4 +54,10 @@ CMakeFiles/TI_301_PJT.dir/matrix.c.o: \
   /data/data/com.termux/files/usr/bin/../../usr/include/malloc.h \
   /data/data/com.termux/files/usr/bin/../../usr/include/android/legacy_stdlib_inlines.h \
   /data/data/com.termux/files/usr/bin/../../usr/include/bits/stdlib_inlines.h \
-  /data/data/com.termux/files/home/p/c/markov/list.h
+  /data/data/com.termux/files/home/p/c/markov/list.h \
+  /data/data/com.termux/files/usr/bin/../../usr/include/math.h \
+  /data/data/com.termux/files/usr/lib/clang/21/include/limits.h \
+  /data/data/com.termux/files/usr/bin/../../usr/include/limits.h \
+  /data/data/com.termux/files/usr/lib/clang/21/include/float.h \
+  /data/data/com.termux/files/usr/bin/../../usr/include/linux/limits.h \
+  /data/data/com.termux/files/usr/bin/../../usr/include/bits/posix_limits.h

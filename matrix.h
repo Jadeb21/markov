@@ -15,4 +15,16 @@ void copie_matrice(Matrix* src, Matrix* dest);
 Matrix* multiplication_matrice(Matrix* M, Matrix* N);
 double difference_matrix(Matrix* M, Matrix* N);
 
+
+/**
+ * @brief Extract a submatrix corresponding to a specific component of a graph partition.
+ *
+ * @param matrix The original adjacency matrix of the graph.
+ * @param part The partition of the graph into strongly connected components.
+ * @param compo_index The index of the component to extract.
+ * @return t_matrix The submatrix corresponding to the specified component.
+ *
+ * We changed t_matrix to Matrix. 
+*/
+Matrix subMatrix(Matrix matrix, t_partition part, int compo_index);
 #endif
