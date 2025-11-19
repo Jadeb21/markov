@@ -9,6 +9,7 @@ set(SOURCES
         hasse.c
         list.c
         tarjan.c
+        matrix.c
 )
 
 add_executable(TI_301_PJT ${SOURCES})
