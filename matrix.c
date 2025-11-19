@@ -26,13 +26,13 @@ Matrix* creer_matrice_adj(int n, int** liste_adjacence, int* tailles_listes) {
   return matrice;
 }
 
-Matrix* creer_matrice_valzeros(int n){
+Matrix* creer_matrice_valzeros(int lignes, int cols){
   Matrix* matrice = (Matrix*)malloc(sizeof(Matrix));
-  matrice->lignes = n;
-  matrice->cols = n;
-  matrice->data =(double**)malloc(sizeof(double*)*n);
-  for (int i = 0; i < n; i++) {
-    matrice->data[i] = (double*)calloc(n, sizeof(double));
+  matrice->lignes = lignes;
+  matrice->cols = cols;
+  matrice->data =(double**)malloc(sizeof(double*)*lignes);
+  for (int i = 0; i < lignes; i++) {
+    matrice->data[i] = (double*)calloc(cols, sizeof(double));
   }
   return matrice;
 }
@@ -54,7 +54,7 @@ Matrix* multiplication_matrice(Matrix* a, Matrix* b){
     printf("Attention : Matrice de dimension differentes\n");
     return NULL;
   }
-  Matrix* result = creer_matrice_valzeros(a->lignes);
+  Matrix* result = creer_matrice_valzeros(a->lignes, b->cols);
   for (int i = 0; i < a->lignes; i++) {
     for (int j = 0; j < b->cols; j++) {
       for (int k = 0; k < a->cols; k++) {

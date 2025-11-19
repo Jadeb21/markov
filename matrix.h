@@ -8,7 +8,7 @@ typedef struct {
 } Matrix;
 
 Matrix* creer_matrice_adj(int n, int** liste_adjacence, int* tailles_listes);
-Matrix* creer_matrice_valzeros(int n);
+Matrix* creer_matrice_valzeros(int lignes, int cols);
 void copie_matrice(Matrix* src, Matrix* dest);
 
 #endif
