@@ -34,8 +34,9 @@ int main() {
     sprintf(mermaidFile, "../data/%s_mermaid.txt", input);
     genererFichierMermaid(g, mermaidFile);
 
+    //On commence la partie 2 - Algorithme de tarjan + diagramme de hasse
     // Affiche l'algo de tarjan
-    t_partition *partition = algorithme_tarjan_partition(g);
+    t_partition *partition = tarjan_calculer_partition(g);
     printf("\n");
 
     printf("Diagramme de Hasse :\n");
@@ -57,14 +58,16 @@ int main() {
     sprintf(hasseFile, "../data/%s_hasse.txt", input);
     genererHasseMermaid(partition, liens, hasseFile, 0);
 
+    //On commence la partie 3 - le calcul matriciel
     printf("Calcul matriciel\n");
 
+    //Affiche la matrice d'origine
     t_matrix* M = creer_matrice_liste_adjacence(&g);
     printf("Matrice M :\n");
     afficher_matrice(M);
 
-    // AJOUT: Usage de subMatrix pour toutes les classes
-    printf("\n=== SOUS-MATRICES PAR CLASSE ===\n");
+    // Usage de subMatrix pour toutes les classes
+    printf("Sous matrice par classe\n");
     for (int compo_index = 0; compo_index < partition->taille; compo_index++) {
         printf("\n--- Classe C%d ---\n", compo_index + 1);
 
@@ -153,10 +156,10 @@ int main() {
         printf("Matrice stationnaire M^%d:\n", iterations);
         afficher_matrice(Mk);
 
-        // AJOUT: Sous-matrices de la matrice stationnaire
-        printf("\n=== SOUS-MATRICES STATIONNAIRES ===\n");
+        // Sous-matrices de la matrice stationnaire
+        printf("Sous matrice stationnaire\n");
         for (int compo_index = 0; compo_index < partition->taille; compo_index++) {
-            printf("\n--- Classe C%d (stationnaire) ---\n", compo_index + 1);
+            printf("Classe C%d (stationnaire) \n", compo_index + 1);
             t_matrix* sous_matrice_stationnaire = subMatrix(Mk, partition, compo_index);
 
             if (sous_matrice_stationnaire != NULL) {

@@ -5,7 +5,9 @@
 #include "list.h"
 #include "tarjan.h"
 
-struct listeAdj* g;
+struct listeAdj* g; //Indispensable si l'on veut travailler avec les listes adjacentes après
+
+//fonction permettant de mettre en place les matrices avec des listes d'adjacences
 t_matrix* creer_matrice_liste_adjacence(listeAdj* g) {
     int n = g->nb_sommets;
     t_matrix* matrice = (t_matrix*)malloc(sizeof(t_matrix));
@@ -31,6 +33,7 @@ t_matrix* creer_matrice_liste_adjacence(listeAdj* g) {
     return matrice;
 }
 
+//fonction qui nous renvoie une matrice de valeur 0
 t_matrix* creer_matrice_valzeros(int lignes, int cols){
   t_matrix* matrice = (t_matrix*)malloc(sizeof (t_matrix));
   matrice->lignes = lignes;
@@ -42,6 +45,7 @@ t_matrix* creer_matrice_valzeros(int lignes, int cols){
   return matrice;
 }
 
+//Fonction permettant de copier la matrice
 void copie_matrice(t_matrix* src, t_matrix* dest){
   if (src->lignes != dest->lignes || src->cols != dest->cols) {
     printf("Attention : Matrice de taille différentes\n");
@@ -54,6 +58,7 @@ void copie_matrice(t_matrix* src, t_matrix* dest){
   }
 }
 
+//Fonction permettant de multiplier deux matrices
 t_matrix* multiplication_matrice(t_matrix* M, t_matrix* N){
   if (M->cols != N->lignes) {
     printf("Attention : Matrice de dimension differentes\n");
@@ -86,6 +91,7 @@ double difference_matrix(t_matrix* M, t_matrix* N){
     return difference;
 }
 
+//Fonction pour afficher la matrice
 void afficher_matrice(t_matrix* matrice) {
     for (int i = 0; i < matrice->lignes; i++) {
         for (int j = 0; j < matrice->cols; j++) {
@@ -139,7 +145,6 @@ t_matrix* subMatrix(t_matrix* matrix, t_partition* part, int compo_index) {
                 liberer_matrice(result);
                 return NULL;
             }
-
             // Copier l'élément
             result->data[i][j_classe] = matrix->data[i][j_matrix];
         }

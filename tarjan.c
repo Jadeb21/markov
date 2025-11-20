@@ -46,7 +46,7 @@ void ajouter_classe(t_partition *partition, int *sommets, int taille) {
 }
 
 // Algorithme pour trouver des composantes fortement connexes
-void tarjan_visite(t_tarjan_data *data, int sommet_index) {
+void tarjan_parcours(t_tarjan_data *data, int sommet_index) {
     t_tarjan_vertex *sommet_courant = &data->sommets[sommet_index];
 
     // Assigner un numéro au sommet
@@ -65,7 +65,7 @@ void tarjan_visite(t_tarjan_data *data, int sommet_index) {
         t_tarjan_vertex *sommet_voisin = &data->sommets[voisin_index];
 
         if (sommet_voisin->num == -1) {
-            tarjan_visite(data, voisin_index);
+            tarjan_parcours(data, voisin_index);
             sommet_courant->num_access = (sommet_courant->num_access < sommet_voisin->num_access) ? sommet_courant->num_access : sommet_voisin->num_access;
         } else if (sommet_voisin->in_pile) {
             sommet_courant->num_access = (sommet_courant->num_access < sommet_voisin->num) ? sommet_courant->num_access : sommet_voisin->num;
@@ -109,7 +109,7 @@ void liberer_tarjan(t_tarjan_data *data) {
 }
 
 // Algorithme principal qui retourne une partition
-t_partition* algorithme_tarjan_partition(listeAdj g) {
+t_partition* tarjan_calculer_partition(listeAdj g) {
     t_tarjan_data *data = initialiser_tarjan(&g);
 
     // Initialisation de la partition
@@ -123,7 +123,7 @@ t_partition* algorithme_tarjan_partition(listeAdj g) {
     // Application de l'algo de Tarjan
     for (int i = 0; i < g.nb_sommets; i++) {
         if (data->sommets[i].num == -1) {
-            tarjan_visite(data, i);
+            tarjan_parcours(data, i);
         }
     }
     t_partition *resultat = data->partition;
