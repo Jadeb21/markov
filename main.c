@@ -65,28 +65,7 @@ int main() {
     t_matrix* M = creer_matrice_liste_adjacence(&g);
     printf("Matrice M :\n");
     afficher_matrice(M);
-
-    // Usage de subMatrix pour toutes les classes
-    printf("Sous matrice par classe\n");
-    for (int compo_index = 0; compo_index < partition->taille; compo_index++) {
-        printf("\n--- Classe C%d ---\n", compo_index + 1);
-
-        t_classe* classe = &partition->classes[compo_index];
-        printf("Sommets: {");
-        for (int j = 0; j < classe->taille; j++) {
-            printf("%d", classe->sommets[j]);
-            if (j < classe->taille - 1) printf(", ");
-        }
-        printf("}\n");
-
-        t_matrix* sous_matrice = subMatrix(M, partition, compo_index);
-
-        if (sous_matrice != NULL) {
-            printf("Sous-matrice %dx%d:\n", sous_matrice->lignes, sous_matrice->cols);
-            afficher_matrice(sous_matrice);
-            liberer_matrice(sous_matrice);
-        }
-    }
+    printf("\n");
 
     // Calculer M²
     printf("Matrice M^2 :\n");
@@ -94,6 +73,7 @@ int main() {
     if (M2 != NULL) {
         afficher_matrice(M2);
     }
+    printf("\n");
 
     // Calculer M³
     printf("Matrice M^3 :\n");
@@ -148,6 +128,30 @@ int main() {
 
     } while (diff > epsilon);
     printf("\n");
+
+    // Usage de subMatrix pour toutes les classes
+    printf("Sous matrice par classe\n");
+    for (int compo_index = 0; compo_index < partition->taille; compo_index++) {
+        printf("\n--- Classe C%d ---\n", compo_index + 1);
+
+        t_classe* classe = &partition->classes[compo_index];
+        printf("Sommets: {");
+        for (int j = 0; j < classe->taille; j++) {
+            printf("%d", classe->sommets[j]);
+            if (j < classe->taille - 1) printf(", ");
+        }
+        printf("}\n");
+
+        t_matrix* sous_matrice = subMatrix(M, partition, compo_index);
+
+        if (sous_matrice != NULL) {
+            printf("Sous-matrice %dx%d:\n", sous_matrice->lignes, sous_matrice->cols);
+            afficher_matrice(sous_matrice);
+            liberer_matrice(sous_matrice);
+        }
+    }
+    printf("\n");
+
 
     // Résultats convergence
     if (convergence_atteinte) {

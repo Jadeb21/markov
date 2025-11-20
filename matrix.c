@@ -35,7 +35,7 @@ t_matrix* creer_matrice_liste_adjacence(listeAdj* g) {
 
 //fonction qui nous renvoie une matrice de valeur 0
 t_matrix* creer_matrice_valzeros(int lignes, int cols){
-  t_matrix* matrice = (t_matrix*)malloc(sizeof (t_matrix));
+  t_matrix* matrice = malloc(sizeof (t_matrix));
   matrice->lignes = lignes;
   matrice->cols = cols;
   matrice->data =(double**)malloc(sizeof(double*)*lignes);
@@ -126,12 +126,8 @@ t_matrix* subMatrix(t_matrix* matrix, t_partition* part, int compo_index) {
 
     t_classe* classe = &part->classes[compo_index];
 
-    // Créer une sous-matrice avec TOUTES les lignes originales, mais seulement les colonnes de la classe
+    // Créer une sous-matrice avec les lignes originales, mais seulement les colonnes de la classe
     t_matrix* result = creer_matrice_valzeros(matrix->lignes, classe->taille);
-    if (result == NULL) {
-        printf("Erreur d'allocation mémoire\n");
-        return NULL;
-    }
 
     // Remplir la sous-matrice
     for (int i = 0; i < matrix->lignes; i++) {           // Toutes les lignes originales
