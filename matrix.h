@@ -1,21 +1,24 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 #include "list.h"
+#include "tarjan.h"
+
 typedef struct {
     double **data;
     int lignes;
     int cols;
-} Matrix;
+} t_matrix;
 
-Matrix* creer_matrice_liste_adjacence(listeAdj* g);
-Matrix* creer_matrice_valzeros(int lignes, int cols);
-Matrix* multiplication_matrice(Matrix* a, Matrix* b);
-Matrix* difference_matrice(Matrix* a, Matrix* b);
-void copie_matrice(Matrix* src, Matrix* dest);
-Matrix* multiplication_matrice(Matrix* M, Matrix* N);
-double difference_matrix(Matrix* M, Matrix* N);
-void afficher_matrice(Matrix* matrice);
-
+t_matrix* creer_matrice_liste_adjacence(listeAdj* g);
+t_matrix* creer_matrice_valzeros(int lignes, int cols);
+t_matrix* multiplication_matrice(t_matrix* a, t_matrix* b);
+t_matrix* difference_matrice(t_matrix* a, t_matrix* b);
+void copie_matrice(t_matrix* src, t_matrix* dest);
+t_matrix* multiplication_matrice(t_matrix* M, t_matrix* N);
+double difference_matrix(t_matrix* M, t_matrix* N);
+void afficher_matrice(t_matrix* matrice);
+void liberer_matrice(t_matrix* matrice);
+t_matrix* subMatrix(t_matrix* matrix, t_partition* part, int compo_index);
 /**
  * @brief Extract a submatrix corresponding to a specific component of a graph partition.
  *

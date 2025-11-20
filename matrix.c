@@ -3,11 +3,12 @@
 #include <stdlib.h>
 #include <math.h>
 #include "list.h"
+#include "tarjan.h"
 
 struct listeAdj* g;
-Matrix* creer_matrice_liste_adjacence(listeAdj* g) {
+t_matrix* creer_matrice_liste_adjacence(listeAdj* g) {
     int n = g->nb_sommets;
-    Matrix* matrice = (Matrix*)malloc(sizeof(Matrix));
+    t_matrix* matrice = (t_matrix*)malloc(sizeof(t_matrix));
     matrice->lignes = n;
     matrice->cols = n;
     matrice->data = (double**)malloc(sizeof(double*) * n);
@@ -30,8 +31,8 @@ Matrix* creer_matrice_liste_adjacence(listeAdj* g) {
     return matrice;
 }
 
-Matrix* creer_matrice_valzeros(int lignes, int cols){
-  Matrix* matrice = (Matrix*)malloc(sizeof(Matrix));
+t_matrix* creer_matrice_valzeros(int lignes, int cols){
+  t_matrix* matrice = (t_matrix*)malloc(sizeof (t_matrix));
   matrice->lignes = lignes;
   matrice->cols = cols;
   matrice->data =(double**)malloc(sizeof(double*)*lignes);
@@ -41,7 +42,7 @@ Matrix* creer_matrice_valzeros(int lignes, int cols){
   return matrice;
 }
 
-void copie_matrice(Matrix* src, Matrix* dest){
+void copie_matrice(t_matrix* src, t_matrix* dest){
   if (src->lignes != dest->lignes || src->cols != dest->cols) {
     printf("Attention : Matrice de taille différentes\n");
     return;
@@ -53,12 +54,12 @@ void copie_matrice(Matrix* src, Matrix* dest){
   }
 }
 
-Matrix* multiplication_matrice(Matrix* M, Matrix* N){
+t_matrix* multiplication_matrice(t_matrix* M, t_matrix* N){
   if (M->cols != N->lignes) {
     printf("Attention : Matrice de dimension differentes\n");
     return NULL;
   }
-  Matrix* result = creer_matrice_valzeros(M->lignes, N->cols);
+  t_matrix* result = creer_matrice_valzeros(M->lignes, N->cols);
   for (int i = 0; i < M->lignes; i++) {
     for (int j = 0; j < N->cols; j++) {
       for (int k = 0; k < M->cols; k++) {
@@ -69,7 +70,7 @@ Matrix* multiplication_matrice(Matrix* M, Matrix* N){
   return result;
 }
 
-double difference_matrix(Matrix* M, Matrix* N){
+double difference_matrix(t_matrix* M, t_matrix* N){
   if (M->lignes != N->lignes || M->cols != N->cols) {
         printf("Attention: Matrices de tailles différentes\n");
         return -1.0;
@@ -85,12 +86,64 @@ double difference_matrix(Matrix* M, Matrix* N){
     return difference;
 }
 
-void afficher_matrice(Matrix* matrice) {
+void afficher_matrice(t_matrix* matrice) {
     for (int i = 0; i < matrice->lignes; i++) {
         for (int j = 0; j < matrice->cols; j++) {
-            printf("%.3f\t", matrice->data[i][j]);
+            printf("%.2f\t", matrice->data[i][j]);
         }
         printf("\n");
     }
 }
 
+void liberer_matrice(t_matrix* matrice) {
+    if (matrice == NULL) {
+        printf("Tentative de liberation d'une matrice NULL\n");
+        return;
+    }
+
+    printf("Liberation d'une matrice %dx%d\n", matrice->lignes, matrice->cols);
+
+    for (int i = 0; i < matrice->lignes; i++) {
+        free(matrice->data[i]);
+    }
+
+    free(matrice->data);
+    free(matrice);
+}
+
+t_matrix* subMatrix(t_matrix* matrix, t_partition* part, int compo_index) {
+    // Vérifications de sécurité
+    if (matrix == NULL || part == NULL || compo_index < 0 || compo_index >= part->taille) {
+        printf("Erreur: Paramètres invalides\n");
+        return NULL;
+    }
+
+    t_classe* classe = &part->classes[compo_index];
+
+    // Créer une sous-matrice avec TOUTES les lignes originales, mais seulement les colonnes de la classe
+    t_matrix* result = creer_matrice_valzeros(matrix->lignes, classe->taille);
+    if (result == NULL) {
+        printf("Erreur d'allocation mémoire\n");
+        return NULL;
+    }
+
+    // Remplir la sous-matrice
+    for (int i = 0; i < matrix->lignes; i++) {           // Toutes les lignes originales
+        for (int j_classe = 0; j_classe < classe->taille; j_classe++) {  // Seulement les colonnes de la classe
+            int j_matrix = classe->sommets[j_classe] - 1;    // -1 pour convertir en indices C (1-based → 0-based)
+
+            // Vérifier l'indice de colonne
+            if (j_matrix < 0 || j_matrix >= matrix->cols) {
+                printf("Erreur: Indice de colonne %d invalide (après conversion: %d)\n",
+                       classe->sommets[j_classe], j_matrix);
+                liberer_matrice(result);
+                return NULL;
+            }
+
+            // Copier l'élément
+            result->data[i][j_classe] = matrix->data[i][j_matrix];
+        }
+    }
+
+    return result;
+}

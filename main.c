@@ -2,11 +2,9 @@
 #include <stdlib.h>
 #include "list.h"
 #include "hasse.h"
-#include "utils.h"
 #include "tarjan.h"
 #include "matrix.h"
 
-Matrix* creer_matrice_liste_adjacence(listeAdj* g);
 int main() {
 
     // laisser l'utilisateur choisir le fichier
@@ -61,20 +59,42 @@ int main() {
 
     printf("Calcul matriciel\n");
 
-    Matrix* M = creer_matrice_liste_adjacence(&g);
+    t_matrix* M = creer_matrice_liste_adjacence(&g);
     printf("Matrice M :\n");
     afficher_matrice(M);
 
+    // AJOUT: Usage de subMatrix pour toutes les classes
+    printf("\n=== SOUS-MATRICES PAR CLASSE ===\n");
+    for (int compo_index = 0; compo_index < partition->taille; compo_index++) {
+        printf("\n--- Classe C%d ---\n", compo_index + 1);
+
+        t_classe* classe = &partition->classes[compo_index];
+        printf("Sommets: {");
+        for (int j = 0; j < classe->taille; j++) {
+            printf("%d", classe->sommets[j]);
+            if (j < classe->taille - 1) printf(", ");
+        }
+        printf("}\n");
+
+        t_matrix* sous_matrice = subMatrix(M, partition, compo_index);
+
+        if (sous_matrice != NULL) {
+            printf("Sous-matrice %dx%d:\n", sous_matrice->lignes, sous_matrice->cols);
+            afficher_matrice(sous_matrice);
+            liberer_matrice(sous_matrice);
+        }
+    }
+
     // Calculer M²
     printf("Matrice M^2 :\n");
-    Matrix* M2 = multiplication_matrice(M, M);
+    t_matrix* M2 = multiplication_matrice(M, M);
     if (M2 != NULL) {
         afficher_matrice(M2);
     }
 
     // Calculer M³
     printf("Matrice M^3 :\n");
-    Matrix* M3 = NULL;
+    t_matrix* M3 = NULL;
     if (M2 != NULL) {
         M3 = multiplication_matrice(M2, M);
         if (M3 != NULL) {
@@ -86,8 +106,8 @@ int main() {
     // Convergence M^k
     printf("Convergence\n");//Quand episolon = 0,01
 
-    Matrix* Mk = creer_matrice_valzeros(g.nb_sommets, g.nb_sommets);
-    Matrix* Mk_prev = creer_matrice_valzeros(g.nb_sommets, g.nb_sommets);
+    t_matrix* Mk = creer_matrice_valzeros(g.nb_sommets, g.nb_sommets);
+    t_matrix* Mk_prev = creer_matrice_valzeros(g.nb_sommets, g.nb_sommets);
 
     // Initialiser Mk avec M
     copie_matrice(M, Mk);
@@ -102,7 +122,7 @@ int main() {
         copie_matrice(Mk, Mk_prev);  // Sauvegarder précédent
 
         // Calculer Mk * M
-        Matrix* temp = multiplication_matrice(Mk, M);
+        t_matrix* temp = multiplication_matrice(Mk, M);
         copie_matrice(temp, Mk);
 
 
@@ -132,6 +152,18 @@ int main() {
         printf("Difference finale : %.6f <= epsilon = %.3f\n", diff, epsilon);
         printf("Matrice stationnaire M^%d:\n", iterations);
         afficher_matrice(Mk);
+
+        // AJOUT: Sous-matrices de la matrice stationnaire
+        printf("\n=== SOUS-MATRICES STATIONNAIRES ===\n");
+        for (int compo_index = 0; compo_index < partition->taille; compo_index++) {
+            printf("\n--- Classe C%d (stationnaire) ---\n", compo_index + 1);
+            t_matrix* sous_matrice_stationnaire = subMatrix(Mk, partition, compo_index);
+
+            if (sous_matrice_stationnaire != NULL) {
+                afficher_matrice(sous_matrice_stationnaire);
+                liberer_matrice(sous_matrice_stationnaire);
+            }
+        }
     } else {
 
         printf("Convergence non atteinte apres %d iterations\n", iterations);
