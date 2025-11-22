@@ -4,11 +4,10 @@
 #include "tarjan.h"
 #include "utils.h"
 
-// Recencer
 t_link_array* rencenser(listeAdj *g, int *t_link_corresp) {
     t_link_array *link = creer_list_link(g->nb_sommets);
 
-    //creation d'une simple matrice pour stockage de ci -> cj
+    //Création d'une simple matrice pour stockage de ci -> cj
     int max_classes = g->nb_sommets; // worst case
     int **seen = malloc(max_classes * sizeof(int*));
     for (int i = 0; i < max_classes; i++) {
@@ -40,6 +39,7 @@ t_link_array* rencenser(listeAdj *g, int *t_link_corresp) {
     return link;
 }
 
+//Création d'un tableau de liens entre classes
 t_link_array* creer_list_link(int nb_sommets) {
     t_link_array *link = malloc(sizeof(t_link_array));
     link->links=malloc(nb_sommets * nb_sommets * sizeof(t_link));
@@ -60,7 +60,7 @@ int* creer_tab_corresp(t_partition *partition, int nb_sommets) {
     return tab;
 }
 
-//Rajout de chaque lien
+//Rajout de chaque lien Ci -> Cj
 void ajouter_link(t_link_array *link, int from, int to) {
     if (link->log_size < link->alloc_size) {
         link->links[link->log_size].from =from;
