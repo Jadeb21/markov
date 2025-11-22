@@ -4,7 +4,7 @@
 #include "utils.h"
 #include <string.h>
 
-// crée une cellule
+// Crée une cellule
 cell *createCell(int arrivee, float probab) {
     cell *nouv = malloc(sizeof(cell));
     nouv->sommet_arrivee = arrivee;
@@ -13,7 +13,7 @@ cell *createCell(int arrivee, float probab) {
     return nouv;
 }
 
-// crée une liste vide
+// Crée une liste vide
 liste *createListe() {
     liste *list = malloc(sizeof(liste));
     list->head = NULL;
@@ -21,17 +21,20 @@ liste *createListe() {
     return list;
 }
 
-// ajoute une cellule au début
+// Ajoute une cellule au début d'une liste d'adjacence
 void addCell(liste *l, int arrivee, float probab) {
     cell* new_cell = createCell(arrivee, probab);
+
+    //Le nouvel élément devient le premier
     new_cell->suivante = l->head;
     l->head = new_cell;
 
+	// Cas où la liste est vide
     if (l->tail == NULL)
         l->tail = new_cell;
 }
 
-// affiche une liste
+// Affiche toute les arrêtes d'une liste
 void displayListe(liste l) {
     cell* current = l.head;
     if (current == NULL) {
@@ -45,12 +48,15 @@ void displayListe(liste l) {
     printf("\n");
 }
 
-// crée une liste d'adjacence vide
+// Crée une liste d'adjacence vide (tableau de listes)
 listeAdj createListeAdj(int taille) {
     listeAdj nouv;
     nouv.nb_sommets = taille;
+
+    //Allocation dynamique d'un tableau de listes
     nouv.tab_liste = malloc(taille * sizeof(liste));
 
+    //Les listes sont initialisées comme vides
     for (int i = 0; i < taille; i++) {
         nouv.tab_liste[i].head = NULL;
         nouv.tab_liste[i].tail = NULL;
@@ -58,7 +64,7 @@ listeAdj createListeAdj(int taille) {
     return nouv;
 }
 
-// affiche une liste d'adjacence
+// Affiche une liste d'adjacence (toutes les listes)
 void displayListeAdj(listeAdj g) {
     for (int i = 0; i < g.nb_sommets; i++) {
         printf("Sommet %d: ", i + 1);
@@ -77,11 +83,13 @@ listeAdj readGraph(const char *filename) {
         exit(EXIT_FAILURE);
     }
 
+    //Lecture du nombre de sommets
     if (fscanf(file, "%d", &nbvert) != 1) {
         perror("Could not read number of vertices");
         exit(EXIT_FAILURE);
     }
 
+    //Création d'une liste d'adjacence vide
     listeAdj g = createListeAdj(nbvert);
 
     while (fscanf(file, "%d %d %f", &depart, &arrivee, &proba) == 3) {
@@ -96,24 +104,26 @@ listeAdj readGraph(const char *filename) {
 // Fonction pour vérifier si le graphe est un graphe de Markov
 int verifierGrapheMarkov(listeAdj g) {
     int estMarkov = 1;
+
+    //On vérifie chaque sommet
     for (int i = 0; i < g.nb_sommets; i++) {
         float somme = 0.0;
         cell *current = g.tab_liste[i].head;
 
-        // Calculer la somme des probabilités sortantes pour le sommet i
+        // On calcule la somme des probabilités sortantes pour le sommet i
         while (current != NULL) {
             somme += current->proba;
             current = current->suivante;
         }
 
-        // Vérifier si la somme est entre 0.99 et 1.00
+        // Vérifier si la somme est environ égale à 1
         if (somme < 0.99 || somme > 1.00) {
             printf("la somme des probabilites du sommet %d est %.6f\n", i + 1, somme);
             estMarkov = 0;
         }
     }
 
-    // Afficher le résultat final UNE SEULE FOIS
+    // Affiche le résultat final UNE SEULE FOIS
     if (estMarkov) {
         printf("Le graphe est un graphe de Markov\n");
     } else {
@@ -132,7 +142,7 @@ void genererFichierMermaid(listeAdj g, const char* nomFichier) {
         return;
     }
 
-    // Écrire l'en-tête
+    // En-tête demandé par le sujet
     fprintf(file, "---\n");
     fprintf(file, "config:\n");
     fprintf(file, "  layout: elk\n");
@@ -141,12 +151,12 @@ void genererFichierMermaid(listeAdj g, const char* nomFichier) {
     fprintf(file, "---\n");
     fprintf(file, "flowchart LR\n");
 
-    // Écrire les sommets avec leur numéro
+    // Déclaration des sommets (avec leur numéro)
     for (int i = 0; i < g.nb_sommets; i++) {
         fprintf(file, "%s((%d))\n", getID(i + 1), i + 1);
     }
 
-    // Écrire les arêtes avec les probabilités
+    // Déclaration des arêtes (avec leur probabilité)
     for (int i = 0; i < g.nb_sommets; i++) {
         cell* current = g.tab_liste[i].head;
         while (current != NULL) {
