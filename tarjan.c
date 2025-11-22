@@ -6,31 +6,42 @@
 
 // Initialisation des structures de données pour Tarjan - c'est notre pile
 t_tarjan_data* initialiser_tarjan(listeAdj *g) {
+
+    //Allocation dynamique de la structure principale
     t_tarjan_data *data = malloc(sizeof(t_tarjan_data));
     data->graphe = g;
+
+    //Tableau des sommets avec les informations de Tarjan
     data->sommets = malloc(g->nb_sommets * sizeof(t_tarjan_vertex));
+
+    //Pile utilisée par Tarjan
     data->pile = malloc(g->nb_sommets * sizeof(int));
     data->size_pile = 0;
+
+    //Compteur pour la numérotation
     data->count = 0;
     data->partition = NULL;
 
     // Initialisation de chaque sommet
     for (int i = 0; i < g->nb_sommets; i++) {
-        data->sommets[i].id = i + 1;
-        data->sommets[i].num = -1;
+        data->sommets[i].id = i + 1;				//Numéro du sommet
+        data->sommets[i].num = -1;					//Pas encore visité
         data->sommets[i].num_access = -1;
-        data->sommets[i].in_pile = 0;
+        data->sommets[i].in_pile = 0;				//Pas encore dans la pile
     }
 
     return data;
 }
 
-// Ajoute une classe à la partition
+// Ajoute une classe à la partition finale
 void ajouter_classe(t_partition *partition, int *sommets, int taille) {
+  	//Si la liste est pleine, on l'aggrandit
     if (partition->taille >= partition->capacite) {
         partition->capacite *= 2;
         partition->classes = realloc(partition->classes, partition->capacite * sizeof(t_classe));
     }
+
+    //Nouvelle classe
     t_classe *classe = &partition->classes[partition->taille];
 
     // Nom de la classe
@@ -38,6 +49,8 @@ void ajouter_classe(t_partition *partition, int *sommets, int taille) {
 
     // Copier les sommets
     classe->sommets = malloc(taille * sizeof(int));
+
+    //On copie les sommets dans un tableau propre à la classe
     memcpy(classe->sommets, sommets, taille * sizeof(int));
     classe->taille = taille;
     classe->capacite = taille;
@@ -65,6 +78,8 @@ void tarjan_parcours(t_tarjan_data *data, int sommet_index) {
         t_tarjan_vertex *sommet_voisin = &data->sommets[voisin_index];
 
         if (sommet_voisin->num == -1) {
+
+          	//Si le sommet voisin n'est pas encore visité alors appel récursif
             tarjan_parcours(data, voisin_index);
             sommet_courant->num_access = (sommet_courant->num_access < sommet_voisin->num_access) ? sommet_courant->num_access : sommet_voisin->num_access;
         } else if (sommet_voisin->in_pile) {
@@ -80,6 +95,8 @@ void tarjan_parcours(t_tarjan_data *data, int sommet_index) {
 
         // Extraire les sommets de la pile
         int voisin_index; //indice du voisin dépilé
+
+        //On dépile jusqu'à revenir au sommet courant
         do {
             voisin_index = data->pile[--data->size_pile];
             data->sommets[voisin_index].in_pile = 0;
@@ -120,7 +137,7 @@ t_partition* tarjan_calculer_partition(listeAdj g) {
 
     printf("Algorithme de Tarjan\n");
 
-    // Application de l'algo de Tarjan
+    // Application de l'algorithme de Tarjan
     for (int i = 0; i < g.nb_sommets; i++) {
         if (data->sommets[i].num == -1) {
             tarjan_parcours(data, i);
@@ -134,8 +151,10 @@ t_partition* tarjan_calculer_partition(listeAdj g) {
 // Fonction pour afficher une partition
 void afficher_partition(t_partition *partition) {
     printf("Partition du graphe :\n");
+
     for (int i = 0; i < partition->taille; i++) {
         printf("%s: {", partition->classes[i].nom);
+
         for (int j = 0; j < partition->classes[i].taille; j++) {
             printf("%d", partition->classes[i].sommets[j]);
             if (j < partition->classes[i].taille - 1) printf(",");

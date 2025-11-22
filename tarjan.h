@@ -5,7 +5,7 @@
 
 /** Structure pour représenter chaque sommet:
 - Numéro de sommet dans le graphe
--
+- Indique si le sommet a été visité
 -
 - Indique si le sommet est dans la pile
 **/
