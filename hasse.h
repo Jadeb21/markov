@@ -3,16 +3,24 @@
 #include "list.h"
 #include "tarjan.h"
 
+/** Structure pour faire un lien entre deux classes
+- Indice classe de départ
+- Indice classe d'arrivée
+**/
 typedef struct {
     int from;
     int to;
 } t_link;
 
+//Tableau dynamique de liens:
 typedef struct {
     t_link *links;
-    int log_size;
-    int alloc_size;
+    int log_size;                  //Nombre de liens stockés
+    int alloc_size;                //Capacité actuelle
 } t_link_array;
+
+
+//*******PROTOTYPES*******
 
 t_link_array* rencenser(listeAdj *g, int *t_link_corresp);
 t_link_array* creer_list_link(int nb_sommets);
