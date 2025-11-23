@@ -25,8 +25,8 @@ t_matrix* creer_matrice_liste_adjacence(listeAdj* g) {
         cell* current = g->tab_liste[i].head;
         while (current != NULL) {
             int etat_arrivee = current->sommet_arrivee - 1;  // -1 pour l'indice C
-            float proba_reelle = current->proba;
-            matrice->data[i][etat_arrivee] = (double)proba_reelle;
+            float proba_reelle = current->proba; // Récupération de la probabilité de transition depuis le sommet courrant vers le voisin
+            matrice->data[i][etat_arrivee] = (double)proba_reelle; //on la stocke dans la matrice à la ligne du sommet courant et à la colonne du voisin
             current = current->suivante;
         }
     }
@@ -55,7 +55,7 @@ void copie_matrice(t_matrix* src, t_matrix* dest){
     }
     for (int i = 0; i < src->lignes; i++) {
       for (int j = 0; j < src->cols; j++) {
-        dest->data[i][j] = src->data[i][j];
+        dest->data[i][j] = src->data[i][j]; // Copie de la matrice source à la matrice destination
       }
   }
 }
