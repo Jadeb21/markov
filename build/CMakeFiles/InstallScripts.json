@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/data/data/com.termux/files/home/p/c/markov/build/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

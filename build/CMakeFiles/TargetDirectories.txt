@@ -1,3 +1,0 @@
-/data/data/com.termux/files/home/p/c/markov/build/CMakeFiles/TI_301_PJT.dir
-/data/data/com.termux/files/home/p/c/markov/build/CMakeFiles/edit_cache.dir
-/data/data/com.termux/files/home/p/c/markov/build/CMakeFiles/rebuild_cache.dir
