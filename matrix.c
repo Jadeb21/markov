@@ -10,7 +10,7 @@ struct listeAdj* g; //Indispensable si l'on veut travailler avec les listes adja
 //fonction permettant de mettre en place les matrices avec des listes d'adjacences
 t_matrix* creer_matrice_liste_adjacence(listeAdj* g) {
     int n = g->nb_sommets;
-    t_matrix* matrice = (t_matrix*)malloc(sizeof(t_matrix));
+    t_matrix* matrice = malloc(sizeof(t_matrix));
     matrice->lignes = n;
     matrice->cols = n;
     matrice->data = (double**)malloc(sizeof(double*) * n);
@@ -33,13 +33,15 @@ t_matrix* creer_matrice_liste_adjacence(listeAdj* g) {
     return matrice;
 }
 
-//fonction qui nous renvoie une matrice de valeur 0
+//Fonction qui nous renvoie une matrice de valeur 0
 t_matrix* creer_matrice_valzeros(int lignes, int cols){
   t_matrix* matrice = malloc(sizeof (t_matrix));
   matrice->lignes = lignes;
   matrice->cols = cols;
+  //Allocation d'un tableau de pointeurs pour les lignes
   matrice->data =(double**)malloc(sizeof(double*)*lignes);
   for (int i = 0; i < lignes; i++) {
+      //Allocation de chaque ligne rempli de 0
     matrice->data[i] = (double*)calloc(cols, sizeof(double));
   }
   return matrice;
@@ -64,10 +66,11 @@ t_matrix* multiplication_matrice(t_matrix* M, t_matrix* N){
     printf("Attention : Matrice de dimension differentes\n");
     return NULL;
   }
+    // Création de notre matrice final
   t_matrix* result = creer_matrice_valzeros(M->lignes, N->cols);
-  for (int i = 0; i < M->lignes; i++) {
-    for (int j = 0; j < N->cols; j++) {
-      for (int k = 0; k < M->cols; k++) {
+  for (int i = 0; i < M->lignes; i++) { //i --> Ligne de M
+    for (int j = 0; j < N->cols; j++) { //j --> Ligne de N
+      for (int k = 0; k < M->cols; k++) { // k --> produit : ligne * colonne
         result->data[i][j] += M->data[i][k] * N->data[k][j];
       }
     }
@@ -75,6 +78,7 @@ t_matrix* multiplication_matrice(t_matrix* M, t_matrix* N){
   return result;
 }
 
+//Fonction qui calcul la somme des différences absolues
 double difference_matrix(t_matrix* M, t_matrix* N){
   if (M->lignes != N->lignes || M->cols != N->cols) {
         printf("Attention: Matrices de tailles différentes\n");
@@ -101,6 +105,7 @@ void afficher_matrice(t_matrix* matrice) {
     }
 }
 
+// Fonction qui permet de libérer de la memoire a notre matrice subMatrix
 void liberer_matrice(t_matrix* matrice) {
     if (matrice == NULL) {
         printf("Tentative de liberation d'une matrice NULL\n");
@@ -117,6 +122,7 @@ void liberer_matrice(t_matrix* matrice) {
     free(matrice);
 }
 
+//Fonction extrait de la matrice originale uniquement les colonnes correspondant aux sommets d’une classe.
 t_matrix* subMatrix(t_matrix* matrix, t_partition* part, int compo_index) {
     // Vérifications de sécurité
     if (matrix == NULL || part == NULL || compo_index < 0 || compo_index >= part->taille) {
